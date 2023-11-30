@@ -151,11 +151,11 @@ clear
 echo ""
 echo "Sistema en español"
 echo ""
-arch-chroot /mnt /bin/bash -c "echo "$idioma UTF-8" > /etc/locale.gen"
+arch-chroot /mnt /bin/bash -c "echo \"$idioma UTF-8\" > /etc/locale.gen"
 arch-chroot /mnt /bin/bash -c "locale-gen"
-arch-chroot /mnt /bin/bash -c "echo "LANG=$idioma" > /etc/locale.conf"
+arch-chroot /mnt /bin/bash -c "echo \"LANG=$idioma\" > /etc/locale.conf"
 arch-chroot /mnt /bin/bash -c "export LANG=$idioma"
-arch-chroot /mnt /bin/bash -c "echo "la-latin1" > /etc/vconsole.conf"
+arch-chroot /mnt /bin/bash -c "echo \"la-latin1\" > /etc/vconsole.conf"
 echo ""
 sleep 3
 
