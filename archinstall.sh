@@ -247,22 +247,7 @@ arch-chroot /mnt /bin/bash -c "systemctl enable lightdm"
 arch-chroot /mnt /bin/bash -c "pacman -S firefox "
 
 #establecer formato de teclado
-	  clear
-            keymap="latam"
-
-      arch-chroot /mnt /bin/bash -c "localectl --no-convert set-x11-keymap $keymap"
-      arch-chroot /mnt /bin/bash -c "setxkbmap -layout $keymap"
-
-      echo -e 'Section "InputClass"' > /mnt/etc/X11/xorg.conf.d/00-keyboard.conf
-      echo -e 'Identifier "system-keyboard"' >> /mnt/etc/X11/xorg.conf.d/00-keyboard.conf
-      echo -e 'MatchIsKeyboard "on"' >> /mnt/etc/X11/xorg.conf.d/00-keyboard.conf
-      echo -e 'Option "XkbLayout" "latam"' >> /mnt/etc/X11/xorg.conf.d/00-keyboard.conf
-      echo -e 'EndSection' >> /mnt/etc/X11/xorg.conf.d/00-keyboard.conf
-      echo ""
-      cat /mnt/etc/X11/xorg.conf.d/00-keyboard.conf
-      sleep 5
-      clear
-
+clear
 
 
 #DESMONTAR Y REINICIAR
