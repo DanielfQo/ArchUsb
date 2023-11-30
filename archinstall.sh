@@ -3,6 +3,8 @@
 #para USB uefi
 
 #Disco
+loadkeys la-latin
+echo ""
 printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' _
 echo "Rutas de Disco disponible: "
 echo ""
@@ -46,6 +48,19 @@ echo "escritorio: $rootpasswd"
 sleep 4
 echo ''
 
+#Actualización de llaves y mirror list
+clear
+pacman -Syy reflector 
+sleep 3
+clear
+echo ""
+echo "Actualizando lista de MirrorList"
+echo ""
+reflector --verbose --latest 10 --sort rate --save /etc/pacman.d/mirrorlist
+clear
+cat /etc/pacman.d/mirrorlist
+sleep 3
+clear
 
 
 uefi=$( ls /sys/firmware/efi/ | grep -ic efivars )
@@ -60,7 +75,7 @@ then
 	
 	sgdisk --zap-all ${disco}
 	parted ${disco} mklabel gpt
-	sgdisk ${disco} -n=1:0:300M -t=1:ef00
+	sgdisk ${disco} -n=1:0:+200M -t=1:ef00
 	sgdisk ${disco} -n=2:0:0
 	fdisk -l ${disco} > /tmp/partition
 	echo ""
@@ -98,7 +113,7 @@ then
 	echo ""
 	echo "Revise en punto de montaje en MOUNTPOINT"
 	echo ""
-	lsblk -l
+	lsblk 
 	sleep 3
 else
 	echo "No support for BIOS"
@@ -106,29 +121,7 @@ fi
 
 
 
-#Actualización de llaves y mirroslist
-clear
-pacman -Syy
-clear
-#iwctl device list
-#read -p "Introduce el nombre de tu dispositivo: " internet
-#iwctl station ${internet} scan
-#iwctl station ${internet} get-networks
-#read -p "Introduce el nombre de tu router: " router_nombre
-#read -p "Introduce la contraseña de tu router: " contra
-#iwctl station ${internet} connect ${router_nombre} --passphrase ${contra}
-clear
-pacman -Sy reflector 
-sleep 3
-clear
-echo ""
-echo "Actualizando lista de MirrorList"
-echo ""
-reflector --verbose --latest 10 --sort rate --save /etc/pacman.d/mirrorlist
-clear
-cat /etc/pacman.d/mirrorlist
-sleep 3
-clear
+
 
 
 echo ""
@@ -166,11 +159,6 @@ arch-chroot /mnt /bin/bash -c "echo "la-latin1" > /etc/vconsole.conf"
 echo ""
 sleep 3
 
-#USUARIO Y ADMIN
-
-arch-chroot /mnt /bin/bash -c "(echo $rootpasswd ; echo $rootpasswd) | passwd root"
-
-
 #hosts
 clear
 #NOmbre de computador
@@ -186,14 +174,15 @@ echo "Hosts: $(cat /mnt/etc/hosts)"
 echo ""
 clear
 
-arch-chroot /mnt /bin/bash -c "reflector --verbose --latest 10 --sort rate --save /etc/pacman.d/mirrorlist"
-clear
-cat /mnt/etc/pacman.d/mirrorlist
 sleep 3
 clear
 
+#USUARIO Y ADMIN
+
+arch-chroot /mnt /bin/bash -c "(echo $rootpasswd ; echo $rootpasswd) | passwd root"
+
 #Instalación del kernel
-arch-chroot /mnt /bin/bash -c "pacman -S grub efibootmgr networkmanager network-manager-applet mtools dosfstools reflector git base-devel linux-headers pulseaudio bluez bluez-utils cups xdg-utils xdg-user-dirs"
+arch-chroot /mnt /bin/bash -c "pacman -S grub efibootmgr networkmanager network-manager-applet mtools dosfstools reflector git base-devel linux-headers pulseaudio bluez bluez-utils cups xdg-utils xdg-user-dirs --noconfirm"
 
 #cambiar los hooks
 echo"Cambie el orden de los hooks de block y keyboard despues de udev"
@@ -226,25 +215,25 @@ arch-chroot /mnt /bin/bash -c "(echo Storage=volatile) >> /etc/systemd/journald.
 arch-chroot /mnt /bin/bash -c "(echo RuntimeMaxUse=30M) >> /etc/systemd/journald.conf.d/usbstick.conf"
 
 #Video
-arch-chroot /mnt /bin/bash -c "pacman -S xf86-video-vesa xf86-video-ati xf86-video-nvidia xf86-video-amdgpu xf86-video-nouveau"
+arch-chroot /mnt /bin/bash -c "pacman -S xf86-video-vesa xf86-video-ati xf86-video-nvidia xf86-video-amdgpu xf86-video-nouveau --noconfirm"
 #NVIDIA > xf86-video-nouveau
 #AMD 	> xf86-video-ati
 #INTEL 	> xf86-video-intel
 
 
 #Xorg
-arch-chroot /mnt /bin/bash -c "pacman -S xorg xorg-apps xorg-xinit xorg-twm xterm xorg-xclock --noconfirm"
+arch-chroot /mnt /bin/bash -c "pacman -S xorg xorg-apps xorg-xinit --noconfirm"
 
 
 #ESCRITORIO
-arch-chroot /mnt /bin/bash -c "pacman -S xfce4 xfce4-goodies --noconfirm"
+arch-chroot /mnt /bin/bash -c "pacman -S xfce4 --noconfirm"
 
 #DISPLAY MANAGER
 arch-chroot /mnt /bin/bash -c "pacman -S lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings light-locker accountsservice --noconfirm"
-arch-chroot /mnt /bin/bash -c "systemctl enable lightdm"
+arch-chroot /mnt /bin/bash -c "systemctl enable lightdm.service"
 
 #NAVEGADOR WEB
-arch-chroot /mnt /bin/bash -c "pacman -S firefox "
+arch-chroot /mnt /bin/bash -c "pacman -S firefox --noconfirm"
 
 #establecer formato de teclado
 clear
@@ -253,3 +242,4 @@ clear
 #DESMONTAR Y REINICIAR
 umount -a
 poweroff
+
