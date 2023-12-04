@@ -22,14 +22,7 @@ echo ""
 read -p "Introduce la clave de $user: " userpasswd
 echo ""
 
-# Escritorios
-printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' _
-echo "Ingresa una opción marcando el numero correcto: (1 - 2 - 3 - 4)"
-echo "1. Terminal Virtual (TTY)"
-echo "2. Xfce4"
-echo "3. Kde Plasma"
-echo "4. Gnome 40"
-echo ""
+# Escritorio
 
 
 # Mostrar datos guardados
@@ -43,7 +36,6 @@ echo "Clave de usuario: $userpasswd"
 echo ''
 echo "Clave de Administrador: $rootpasswd"
 echo ''
-echo "escritorio: $rootpasswd"
 sleep 4
 echo ''
 
