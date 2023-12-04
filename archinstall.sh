@@ -207,39 +207,42 @@ echo"descomentar el wheel all"
 sleep 2
 arch-chroot /mnt /bin/bash -c "EDITOR=vim visudo"
 
+clear
 
-arch-chroot /mnt /bin/bash -c "mkdir /etc/systemd/journald.conf.d"
+umount -a
+poweroff
+
+#arch-chroot /mnt /bin/bash -c "mkdir /etc/systemd/journald.conf.d"
 							
-arch-chroot /mnt /bin/bash -c "(echo [Journal]) >> /etc/systemd/journald.conf.d/usbstick.conf"
-arch-chroot /mnt /bin/bash -c "(echo Storage=volatile) >> /etc/systemd/journald.conf.d/usbstick.conf"
-arch-chroot /mnt /bin/bash -c "(echo RuntimeMaxUse=30M) >> /etc/systemd/journald.conf.d/usbstick.conf"
+#arch-chroot /mnt /bin/bash -c "(echo [Journal]) >> /etc/systemd/journald.conf.d/usbstick.conf"
+#arch-chroot /mnt /bin/bash -c "(echo Storage=volatile) >> /etc/systemd/journald.conf.d/usbstick.conf"
+#arch-chroot /mnt /bin/bash -c "(echo RuntimeMaxUse=30M) >> /etc/systemd/journald.conf.d/usbstick.conf"
 
 #Video
-arch-chroot /mnt /bin/bash -c "pacman -S xf86-video-vesa xf86-video-ati xf86-video-nvidia xf86-video-amdgpu xf86-video-nouveau --noconfirm"
+#arch-chroot /mnt /bin/bash -c "pacman -S xf86-video-vesa xf86-video-ati xf86-video-nvidia xf86-video-amdgpu xf86-video-nouveau --noconfirm"
 #NVIDIA > xf86-video-nouveau
 #AMD 	> xf86-video-ati
 #INTEL 	> xf86-video-intel
 
 
 #Xorg
-arch-chroot /mnt /bin/bash -c "pacman -S xorg xorg-apps xorg-xinit --noconfirm"
+#arch-chroot /mnt /bin/bash -c "pacman -S xorg xorg-apps xorg-xinit --noconfirm"
 
 
 #ESCRITORIO
-arch-chroot /mnt /bin/bash -c "pacman -S xfce4 --noconfirm"
+#arch-chroot /mnt /bin/bash -c "pacman -S xfce4 --noconfirm"
 
 #DISPLAY MANAGER
-arch-chroot /mnt /bin/bash -c "pacman -S lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings light-locker accountsservice --noconfirm"
-arch-chroot /mnt /bin/bash -c "systemctl enable lightdm.service"
+#arch-chroot /mnt /bin/bash -c "pacman -S lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings light-locker accountsservice --noconfirm"
+#arch-chroot /mnt /bin/bash -c "systemctl enable lightdm.service"
 
 #NAVEGADOR WEB
-arch-chroot /mnt /bin/bash -c "pacman -S firefox --noconfirm"
+#arch-chroot /mnt /bin/bash -c "pacman -S firefox --noconfirm"
 
 #establecer formato de teclado
-clear
+#clear
 
 
 #DESMONTAR Y REINICIAR
-umount -a
-poweroff
+
 
