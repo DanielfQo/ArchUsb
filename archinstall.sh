@@ -30,8 +30,7 @@ echo "2. Xfce4"
 echo "3. Kde Plasma"
 echo "4. Gnome 40"
 echo ""
-read -p "Introduce la opción de Escritorio: " escritorio
-echo ""
+
 
 # Mostrar datos guardados
 clear
