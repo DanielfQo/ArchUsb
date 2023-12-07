@@ -94,8 +94,8 @@ then
 	echo ""
 
 	mkfs.fat -F32 $(cat boot-efi) 
-	mkfs.ext4 -O {^has_journal} $(cat root-efi) 
- 	mkdir -p /mnt
+	mkfs.ext4 -O "^has_journal" $(cat root-efi) 
+ 	
 	mount $(cat root-efi) /mnt 
 	mkdir -p /mnt/boot/efi 
 	mount $(cat boot-efi) /mnt/boot/efi 
