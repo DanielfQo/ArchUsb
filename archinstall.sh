@@ -66,7 +66,7 @@ then
 	
 	sgdisk --zap-all ${disco}
 	parted ${disco} mklabel gpt
-	sgdisk ${disco} -n=1:0:+200M -t=1:ef00
+	sgdisk ${disco} -n=1:0:+300M -t=1:ef00
 	sgdisk ${disco} -n=2:0:0
 	fdisk -l ${disco} > /tmp/partition
 	echo ""
@@ -95,6 +95,7 @@ then
 
 	mkfs.fat -F32 $(cat boot-efi) 
 	mkfs.ext4 -O {^has_journal} $(cat root-efi) 
+ 	mkdir -p /mnt
 	mount $(cat root-efi) /mnt 
 	mkdir -p /mnt/boot/efi 
 	mount $(cat boot-efi) /mnt/boot/efi 
