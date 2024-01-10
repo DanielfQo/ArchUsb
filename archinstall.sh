@@ -144,10 +144,13 @@ echo ""
 echo "Sistema en español"
 echo ""
 arch-chroot /mnt /bin/bash -c "echo \"$idioma UTF-8\" > /etc/locale.gen"
+arch-chroot /mnt /bin/bash -c "vim /etc/locale.gen"
 arch-chroot /mnt /bin/bash -c "locale-gen"
 arch-chroot /mnt /bin/bash -c "echo \"LANG=$idioma\" > /etc/locale.conf"
+arch-chroot /mnt /bin/bash -c "vim /etc/locale.conf"
 arch-chroot /mnt /bin/bash -c "export LANG=$idioma"
-arch-chroot /mnt /bin/bash -c "echo \"la-latin1\" > /etc/vconsole.conf"
+arch-chroot /mnt /bin/bash -c "echo \"es\" > /etc/vconsole.conf"
+arch-chroot /mnt /bin/bash -c "vim /etc/vconsole.conf"
 echo ""
 sleep 3
 
@@ -156,9 +159,12 @@ clear
 #NOmbre de computador
 hostname=archusb
 arch-chroot /mnt /bin/bash -c "(echo '$hostname') > /etc/hostname"
+arch-chroot /mnt /bin/bash -c "vim /etc/hostname"
 arch-chroot /mnt /bin/bash -c "(echo '127.0.0.1 localhost') >> /etc/hosts"
 arch-chroot /mnt /bin/bash -c "(echo '::1 localhost') >> /etc/hosts"
 arch-chroot /mnt /bin/bash -c "(echo '127.0.1.1 $hostname.localdomain $hostname')>> /etc/hosts"
+arch-chroot /mnt /bin/bash -c "vim /etc/hosts"
+
 clear
 echo "Hostname: $(cat /mnt/etc/hostname)"
 echo ""
