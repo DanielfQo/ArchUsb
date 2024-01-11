@@ -11,7 +11,6 @@ vim /etc/locale.gen
 locale-gen
 echo \"LANG=$idioma\" > /etc/locale.conf
 vim /etc/locale.conf
-export LANG=$idioma
 echo \"es\" > /etc/vconsole.conf
 vim /etc/vconsole.conf
 echo ""
