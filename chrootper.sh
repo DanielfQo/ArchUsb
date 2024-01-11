@@ -66,6 +66,6 @@ sleep 2
 EDITOR=vim visudo
 
 clear
-
+exit
 umount -a
-poweroff
+reboot
