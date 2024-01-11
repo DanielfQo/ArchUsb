@@ -129,7 +129,7 @@ echo ""
 echo "genfstab -U /mnt >> /mnt/etc/fstab"
 echo ""
 
-genfstab -p /mnt >> /mnt/etc/fstab
+genfstab -U /mnt >> /mnt/etc/fstab
 cat /mnt/etc/fstab
 sleep 4
 clear
