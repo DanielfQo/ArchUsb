@@ -42,14 +42,14 @@ echo ''
 
 #Actualización de llaves y mirror list
 clear
-pacman -Syy reflector 
+pacman -Syy reflector --noconfirm
 sleep 3
 clear
 echo ""
 echo "Actualizando lista de MirrorList"
 echo ""
 reflector --verbose --latest 10 --sort rate --save /etc/pacman.d/mirrorlist
-pacman -Syy
+pacman -Syy --noconfirm
 clear
 cat /etc/pacman.d/mirrorlist
 sleep 3
