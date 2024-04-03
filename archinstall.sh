@@ -92,14 +92,14 @@ then
 	echo ""
 	echo "Formateando Particiones"
 	echo ""
-
+	sleep 4
 	mkfs.fat -F32 $(cat boot-efi) 
 	mkfs.ext4 -O "^has_journal" $(cat root-efi) 
  	
 	mount $(cat root-efi) /mnt 
 	mkdir -p /mnt/boot/efi 
 	mount $(cat boot-efi) /mnt/boot/efi 
-
+	sleep 4
 
 	clear
 	echo ""
@@ -133,10 +133,12 @@ genfstab -U /mnt >> /mnt/etc/fstab
 cat /mnt/etc/fstab
 sleep 4
 clear
-
+sleep 4
 #Horario idioma
 
 arch-chroot /mnt
+
+sleep 4
 
 ln -sf /usr/share/zoneinfo/America/Lima /etc/localtime
 hwclock --systohc
@@ -146,14 +148,12 @@ clear
 echo ""
 echo "Sistema en español"
 echo ""
-echo \"$idioma UTF-8\" > /etc/locale.gen
 vim /etc/locale.gen
 locale-gen
-echo \"LANG=$idioma\" > /etc/locale.conf
+echo \"LANG=es_PE.UTF-8\" > /etc/locale.conf
 vim /etc/locale.conf
-echo \"es\" > /etc/vconsole.conf
+echo \"KEYMAP=es\" > /etc/vconsole.conf
 vim /etc/vconsole.conf
-echo ""
 sleep 3
 
 #hosts
@@ -164,26 +164,22 @@ hostname=archusb
 vim /etc/hostname
 (echo '127.0.0.1 localhost') >> /etc/hosts
 (echo '::1 localhost') >> /etc/hosts
-(echo '127.0.1.1 $hostname.localdomain $hostname')>> /etc/hosts
+(echo '127.0.1.1 archusb.localdomain archusb')>> /etc/hosts
 vim /etc/hosts
 
-clear
-echo "Hostname: $(cat /mnt/etc/hostname)"
-echo ""
-echo "Hosts: $(cat /mnt/etc/hosts)"
-echo ""
-clear
-
-sleep 3
+sleep 4
 clear
 
 #USUARIO Y ADMIN
 
-(echo $rootpasswd ; echo $rootpasswd) | passwd root
+(echo $userpasswd ; echo $userpasswd) | passwd
+
+sleep 4
 
 #Instalación del kernel
 pacman -S grub efibootmgr networkmanager network-manager-applet mtools dosfstools reflector git base-devel linux-headers pulseaudio bluez bluez-utils cups xdg-utils xdg-user-dirs --noconfirm
 
+sleep 4
 #cambiar los hooks
 echo"Cambie el orden de los hooks de block y keyboard despues de udev"
 sleep 4
@@ -200,6 +196,7 @@ systemctl enable bluetooth
 systemctl enable cups
 
 useradd -mG wheel $user
+sleep 3
 (echo $userpasswd ; echo $userpasswd) | passwd $user
 echo"descomentar el wheel all"
 sleep 2
