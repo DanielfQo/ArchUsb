@@ -121,7 +121,7 @@ fi
 echo ""
 echo "Instalando Sistema base con vim"
 echo ""
-pacman -S archlinux-keyring
+pacman -S archlinux-keyring --noconfirm
 pacstrap /mnt base linux linux-firmware vim
 sleep 4
 echo ""
