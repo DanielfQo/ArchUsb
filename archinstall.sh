@@ -3,6 +3,7 @@
 #para USB uefi
 
 #Disco
+cd ..
 loadkeys la-latin
 echo ""
 printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' _
