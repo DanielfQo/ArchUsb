@@ -140,70 +140,70 @@ arch-chroot /mnt
 
 sleep 4
 
-ln -sf /usr/share/zoneinfo/America/Lima /etc/localtime
-hwclock --systohc
+arch-chroot /mnt /bin/bash -c ln -sf /usr/share/zoneinfo/America/Lima /etc/localtime
+arch-chroot /mnt /bin/bash -c hwclock --systohc
 
 idioma="es_PE.UTF-8"
-clear
-echo ""
-echo "Sistema en español"
-echo ""
-vim /etc/locale.gen
-locale-gen
-echo \"LANG=es_PE.UTF-8\" > /etc/locale.conf
-vim /etc/locale.conf
-echo \"KEYMAP=es\" > /etc/vconsole.conf
-vim /etc/vconsole.conf
-sleep 3
+arch-chroot /mnt /bin/bash -c clear
+arch-chroot /mnt /bin/bash -c echo ""
+arch-chroot /mnt /bin/bash -c echo "Sistema en español"
+arch-chroot /mnt /bin/bash -c echo ""
+arch-chroot /mnt /bin/bash -c vim /etc/locale.gen
+arch-chroot /mnt /bin/bash -c locale-gen
+arch-chroot /mnt /bin/bash -c echo \"LANG=es_PE.UTF-8\" > /etc/locale.conf
+arch-chroot /mnt /bin/bash -c vim /etc/locale.conf
+arch-chroot /mnt /bin/bash -c echo \"KEYMAP=es\" > /etc/vconsole.conf
+arch-chroot /mnt /bin/bash -c vim /etc/vconsole.conf
+arch-chroot /mnt /bin/bash -c sleep 3
 
 #hosts
-clear
+arch-chroot /mnt /bin/bash -c clear
 #NOmbre de computador
 hostname=archusb
-(echo '$hostname') > /etc/hostname
-vim /etc/hostname
-(echo '127.0.0.1 localhost') >> /etc/hosts
-(echo '::1 localhost') >> /etc/hosts
-(echo '127.0.1.1 archusb.localdomain archusb')>> /etc/hosts
-vim /etc/hosts
+arch-chroot /mnt /bin/bash -c (echo '$hostname') > /etc/hostname
+arch-chroot /mnt /bin/bash -c vim /etc/hostname
+arch-chroot /mnt /bin/bash -c (echo '127.0.0.1 localhost') >> /etc/hosts
+arch-chroot /mnt /bin/bash -c (echo '::1 localhost') >> /etc/hosts
+arch-chroot /mnt /bin/bash -c (echo '127.0.1.1 archusb.localdomain archusb')>> /etc/hosts
+arch-chroot /mnt /bin/bash -c vim /etc/hosts
 
-sleep 4
-clear
+arch-chroot /mnt /bin/bash -c sleep 4
+arch-chroot /mnt /bin/bash -c clear
 
 #USUARIO Y ADMIN
 
-(echo $userpasswd ; echo $userpasswd) | passwd
+arch-chroot /mnt /bin/bash -c (echo $userpasswd ; echo $userpasswd) | passwd
 
-sleep 4
+arch-chroot /mnt /bin/bash -c sleep 4
 
 #Instalación del kernel
-pacman -S grub efibootmgr networkmanager network-manager-applet mtools dosfstools reflector git base-devel linux-headers pulseaudio bluez bluez-utils cups xdg-utils xdg-user-dirs --noconfirm
+arch-chroot /mnt /bin/bash -c pacman -S grub efibootmgr networkmanager network-manager-applet mtools dosfstools reflector git base-devel linux-headers pulseaudio bluez bluez-utils cups xdg-utils xdg-user-dirs --noconfirm
 
-sleep 4
+arch-chroot /mnt /bin/bash -c sleep 4
 #cambiar los hooks
-echo"Cambie el orden de los hooks de block y keyboard despues de udev"
-sleep 4
-vim /etc/mkinitcpio.conf
-mkinitcpio -p linux
+arch-chroot /mnt /bin/bash -c echo"Cambie el orden de los hooks de block y keyboard despues de udev"
+arch-chroot /mnt /bin/bash -c sleep 4
+arch-chroot /mnt /bin/bash -c vim /etc/mkinitcpio.conf
+arch-chroot /mnt /bin/bash -c mkinitcpio -p linux
 #instalar el grub
 
-grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB --removable --recheck
-grub-mkconfig -o /boot/grub/grub.cfg
+arch-chroot /mnt /bin/bash -c grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB --removable --recheck
+arch-chroot /mnt /bin/bash -c grub-mkconfig -o /boot/grub/grub.cfg
 
 #ACTIVAR SERVICIOS
-systemctl enable NetworkManager
-systemctl enable bluetooth
-systemctl enable cups
+arch-chroot /mnt /bin/bash -c systemctl enable NetworkManager
+arch-chroot /mnt /bin/bash -c systemctl enable bluetooth
+arch-chroot /mnt /bin/bash -c systemctl enable cups
 
-useradd -mG wheel $user
-sleep 3
-(echo $userpasswd ; echo $userpasswd) | passwd $user
-echo"descomentar el wheel all"
-sleep 2
-EDITOR=vim visudo
+arch-chroot /mnt /bin/bash -c useradd -mG wheel $user
+arch-chroot /mnt /bin/bash -c sleep 3
+arch-chroot /mnt /bin/bash -c (echo $userpasswd ; echo $userpasswd) | passwd $user
+arch-chroot /mnt /bin/bash -c echo"descomentar el wheel all"
+arch-chroot /mnt /bin/bash -c sleep 2
+arch-chroot /mnt /bin/bash -c EDITOR=vim visudo
 
-clear
-exit
+arch-chroot /mnt /bin/bash -c clear
+arch-chroot /mnt /bin/bash -c exit
 umount -a
 reboot
 
