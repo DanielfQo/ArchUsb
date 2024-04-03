@@ -120,9 +120,8 @@ fi
 echo ""
 echo "Instalando Sistema base con vim"
 echo ""
+pacman -S archlinux-keyring
 pacstrap /mnt base linux linux-firmware vim
-clear
-
 sleep 4
 echo ""
 echo "Archivo FSTAB"
@@ -138,6 +137,74 @@ sleep 4
 
 arch-chroot /mnt
 
+sleep 4
+
+ln -sf /usr/share/zoneinfo/America/Lima /etc/localtime
+hwclock --systohc
+
+idioma="es_PE.UTF-8"
+clear
+echo ""
+echo "Sistema en español"
+echo ""
+vim /etc/locale.gen
+locale-gen
+echo \"LANG=es_PE.UTF-8\" > /etc/locale.conf
+vim /etc/locale.conf
+echo \"KEYMAP=es\" > /etc/vconsole.conf
+vim /etc/vconsole.conf
+sleep 3
+
+#hosts
+clear
+#NOmbre de computador
+hostname=archusb
+(echo '$hostname') > /etc/hostname
+vim /etc/hostname
+(echo '127.0.0.1 localhost') >> /etc/hosts
+(echo '::1 localhost') >> /etc/hosts
+(echo '127.0.1.1 archusb.localdomain archusb')>> /etc/hosts
+vim /etc/hosts
+
+sleep 4
+clear
+
+#USUARIO Y ADMIN
+
+(echo $userpasswd ; echo $userpasswd) | passwd
+
+sleep 4
+
+#Instalación del kernel
+pacman -S grub efibootmgr networkmanager network-manager-applet mtools dosfstools reflector git base-devel linux-headers pulseaudio bluez bluez-utils cups xdg-utils xdg-user-dirs --noconfirm
+
+sleep 4
+#cambiar los hooks
+echo"Cambie el orden de los hooks de block y keyboard despues de udev"
+sleep 4
+vim /etc/mkinitcpio.conf
+mkinitcpio -p linux
+#instalar el grub
+
+grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB --removable --recheck
+grub-mkconfig -o /boot/grub/grub.cfg
+
+#ACTIVAR SERVICIOS
+systemctl enable NetworkManager
+systemctl enable bluetooth
+systemctl enable cups
+
+useradd -mG wheel $user
+sleep 3
+(echo $userpasswd ; echo $userpasswd) | passwd $user
+echo"descomentar el wheel all"
+sleep 2
+EDITOR=vim visudo
+
+clear
+exit
+umount -a
+reboot
 
 
 #arch-chroot /mnt /bin/bash -c "mkdir /etc/systemd/journald.conf.d"
