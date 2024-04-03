@@ -48,6 +48,7 @@ echo ""
 echo "Actualizando lista de MirrorList"
 echo ""
 reflector --verbose --latest 10 --sort rate --save /etc/pacman.d/mirrorlist
+pacman -Syy
 clear
 cat /etc/pacman.d/mirrorlist
 sleep 3
@@ -106,7 +107,7 @@ then
 	echo "Revise en punto de montaje en MOUNTPOINT"
 	echo ""
 	lsblk 
-	sleep 3
+	sleep 4
 else
 	echo "No support for BIOS"
 fi
@@ -122,11 +123,10 @@ echo ""
 pacstrap /mnt base linux linux-firmware vim
 clear
 
-
+sleep 4
 echo ""
 echo "Archivo FSTAB"
 echo ""
-echo "genfstab -U /mnt >> /mnt/etc/fstab"
 echo ""
 
 genfstab -U /mnt >> /mnt/etc/fstab
