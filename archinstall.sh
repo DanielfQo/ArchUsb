@@ -138,71 +138,61 @@ sleep 4
 
 sleep 4
 
-arch-chroot /mnt /bin/bash -c ln -sf /usr/share/zoneinfo/America/Lima /etc/localtime
-arch-chroot /mnt /bin/bash -c hwclock --systohc
+arch-chroot /mnt /bin/bash <<EOF
 
+# Configuración de zona horaria
+ln -sf /usr/share/zoneinfo/America/Lima /etc/localtime
+hwclock --systohc
+
+# Configuración de idioma
 idioma="es_PE.UTF-8"
-arch-chroot /mnt /bin/bash -c clear
-arch-chroot /mnt /bin/bash -c echo ""
-arch-chroot /mnt /bin/bash -c echo "Sistema en español"
-arch-chroot /mnt /bin/bash -c echo ""
-arch-chroot /mnt /bin/bash -c vim /etc/locale.gen
-arch-chroot /mnt /bin/bash -c locale-gen
-arch-chroot /mnt /bin/bash -c echo \"LANG=es_PE.UTF-8\" > /etc/locale.conf
-arch-chroot /mnt /bin/bash -c vim /etc/locale.conf
-arch-chroot /mnt /bin/bash -c echo \"KEYMAP=es\" > /etc/vconsole.conf
-arch-chroot /mnt /bin/bash -c vim /etc/vconsole.conf
-arch-chroot /mnt /bin/bash -c sleep 3
+clear
+echo ""
+echo "Sistema en español"
+echo ""
+echo LANG=es_PE.UTF-8 > /etc/locale.conf
+locale-gen
+echo KEYMAP=es > /etc/vconsole.conf
 
-#hosts
-arch-chroot /mnt /bin/bash -c clear
-#NOmbre de computador
+# Configuración de hosts
+clear
 hostname=archusb
-arch-chroot /mnt /bin/bash -c (echo '$hostname') > /etc/hostname
-arch-chroot /mnt /bin/bash -c vim /etc/hostname
-arch-chroot /mnt /bin/bash -c (echo '127.0.0.1 localhost') >> /etc/hosts
-arch-chroot /mnt /bin/bash -c (echo '::1 localhost') >> /etc/hosts
-arch-chroot /mnt /bin/bash -c (echo '127.0.1.1 archusb.localdomain archusb')>> /etc/hosts
-arch-chroot /mnt /bin/bash -c vim /etc/hosts
+echo '$hostname' > /etc/hostname
+echo '127.0.0.1 localhost' >> /etc/hosts
+echo '::1 localhost' >> /etc/hosts
+echo '127.0.1.1 archusb.localdomain archusb' >> /etc/hosts
 
-arch-chroot /mnt /bin/bash -c sleep 4
-arch-chroot /mnt /bin/bash -c clear
+# Configuración de usuario y contraseña
+userpasswd="$userpasswd"
+(echo $userpasswd ; echo $userpasswd) | passwd
+sleep 4
 
-#USUARIO Y ADMIN
+# Instalación de paquetes
+pacman -S grub efibootmgr networkmanager network-manager-applet mtools dosfstools reflector git base-devel linux-headers pulseaudio bluez bluez-utils cups xdg-utils xdg-user-dirs --noconfirm
+sleep 4
 
-arch-chroot /mnt /bin/bash -c (echo $userpasswd ; echo $userpasswd) | passwd
+# Cambiar los hooks de mkinitcpio.conf
+echo "Cambie el orden de los hooks de block y keyboard después de udev"
+sleep 4
+vim /etc/mkinitcpio.conf
+mkinitcpio -p linux
 
-arch-chroot /mnt /bin/bash -c sleep 4
+# Instalar GRUB
+grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB --removable --recheck
+grub-mkconfig -o /boot/grub/grub.cfg
 
-#Instalación del kernel
-arch-chroot /mnt /bin/bash -c pacman -S grub efibootmgr networkmanager network-manager-applet mtools dosfstools reflector git base-devel linux-headers pulseaudio bluez bluez-utils cups xdg-utils xdg-user-dirs --noconfirm
+# Activar servicios
+systemctl enable NetworkManager bluetooth cups
 
-arch-chroot /mnt /bin/bash -c sleep 4
-#cambiar los hooks
-arch-chroot /mnt /bin/bash -c echo"Cambie el orden de los hooks de block y keyboard despues de udev"
-arch-chroot /mnt /bin/bash -c sleep 4
-arch-chroot /mnt /bin/bash -c vim /etc/mkinitcpio.conf
-arch-chroot /mnt /bin/bash -c mkinitcpio -p linux
-#instalar el grub
+# Crear usuario y darle permisos sudo
+useradd -mG wheel $user
+(echo $userpasswd ; echo $userpasswd) | passwd $user
+sed -i 's/# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/' /etc/sudoers
 
-arch-chroot /mnt /bin/bash -c grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB --removable --recheck
-arch-chroot /mnt /bin/bash -c grub-mkconfig -o /boot/grub/grub.cfg
+EOF
 
-#ACTIVAR SERVICIOS
-arch-chroot /mnt /bin/bash -c systemctl enable NetworkManager
-arch-chroot /mnt /bin/bash -c systemctl enable bluetooth
-arch-chroot /mnt /bin/bash -c systemctl enable cups
-
-arch-chroot /mnt /bin/bash -c useradd -mG wheel $user
-arch-chroot /mnt /bin/bash -c sleep 3
-arch-chroot /mnt /bin/bash -c (echo $userpasswd ; echo $userpasswd) | passwd $user
-arch-chroot /mnt /bin/bash -c echo"descomentar el wheel all"
-arch-chroot /mnt /bin/bash -c sleep 2
-arch-chroot /mnt /bin/bash -c EDITOR=vim visudo
-
-arch-chroot /mnt /bin/bash -c clear
-arch-chroot /mnt /bin/bash -c exit
-umount -a
+# Desmontar particiones y reiniciar
+umount -R /mnt
 reboot
 
 
