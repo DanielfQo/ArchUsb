@@ -136,6 +136,7 @@ clear
 
 #Horario idioma
 
+arch-chroot /mnt
 
 #arch-chroot /mnt /bin/bash -c "mkdir /etc/systemd/journald.conf.d"
 							
