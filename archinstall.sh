@@ -136,8 +136,6 @@ clear
 sleep 4
 #Horario idioma
 
-arch-chroot /mnt
-
 sleep 4
 
 arch-chroot /mnt /bin/bash -c ln -sf /usr/share/zoneinfo/America/Lima /etc/localtime
